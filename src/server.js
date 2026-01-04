@@ -36,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Health check route
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
+  res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString()
   });
@@ -44,7 +44,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Portfolio API is running...',
     version: '1.0.0'
   });
@@ -61,11 +61,9 @@ const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   console.log(`
-    ╔════════════════════════════════════════╗
-    ║  Server running in ${process.env.NODE_ENV || 'development'} mode    ║
-    ║  Port: ${PORT}                         ║
-    ║  URL: http://localhost:${PORT}         ║
-    ╚════════════════════════════════════════╝
+    Server running in ${process.env.NODE_ENV || 'development'} mode    
+    Port: ${PORT}                         
+    URL: http://localhost:${PORT}         
   `);
 });
 
