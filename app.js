@@ -1,13 +1,13 @@
-import dotenv from 'dotenv';
-
-// Load env vars FIRST before any other imports that might use them
-dotenv.config();
-
 import express from 'express';
+import dotenv from 'dotenv';
 import cors from 'cors';
-import connectDB from './config/db.js';
-import contactRoutes from './routes/contactRoutes.js';
-import { errorHandler, notFound } from './middleware/errorHandler.js';
+import connectDB from './src/config/db.js';
+import contactRoutes from './src/routes/contactRoutes.js';
+import { errorHandler } from './src/middleware/errorHandler.js';
+import { notFound } from './src/middleware/notFound.js';
+
+// Load env vars
+dotenv.config();
 
 // Connect to database
 connectDB();
