@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
+    "module": "CommonJS",
     "lib": ["ES2022"],
     "moduleResolution": "node",
     "rootDir": "./src",
@@ -20,7 +20,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowJs": false,
-    "types": ["node"]
+    "types": ["node"],
+    "allowImportingTsExtensions": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
