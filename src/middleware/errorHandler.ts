@@ -1,23 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface ErrorResponse {
-  success: boolean;
-  error: string;
-  stack: string | null;
+interface CustomError extends Error {
+  statusCode?: number;
 }
 
 export const errorHandler = (
-  err: Error,
+  err: CustomError,
   _req: Request,
-  res: Response
+  res: Response,
+  _next: NextFunction
 ): void => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  const statusCode = err.statusCode || 500;
   
   res.status(statusCode).json({
     success: false,
-    error: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
-  } as ErrorResponse);
+    error: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  });
 };
 
 export const notFound = (
