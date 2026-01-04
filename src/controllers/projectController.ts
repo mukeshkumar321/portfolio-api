@@ -29,22 +29,24 @@ export const getProjects = async (_req: Request, res: Response) => {
 };
 
 // GET /api/v1/projects/:id
-export const getProject = async (req: Request, res: Response) => {
+export const getProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!isValidObjectId(req.params.id)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "Invalid project ID",
       });
+      return;
     }
 
     const project = await Project.findById(req.params.id).lean();
 
     if (!project) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         error: "Project not found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -87,13 +89,14 @@ export const createProject = async (req: Request, res: Response) => {
 };
 
 // PUT /api/v1/projects/:id
-export const updateProject = async (req: Request, res: Response) => {
+export const updateProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!isValidObjectId(req.params.id)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "Invalid project ID",
       });
+      return;
     }
 
     const updateData: any = {};
@@ -119,10 +122,11 @@ export const updateProject = async (req: Request, res: Response) => {
     });
 
     if (!project) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         error: "Project not found",
       });
+      return;
     }
 
     res.status(200).json({
@@ -136,23 +140,26 @@ export const updateProject = async (req: Request, res: Response) => {
     });
   }
 };
+
 // DELETE /api/v1/projects/:id
-export const deleteProject = async (req: Request, res: Response) => {
+export const deleteProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!isValidObjectId(req.params.id)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: "Invalid project ID",
       });
+      return;
     }
 
     const project = await Project.findByIdAndDelete(req.params.id);
 
     if (!project) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         error: "Project not found",
       });
+      return;
     }
 
     res.status(200).json({

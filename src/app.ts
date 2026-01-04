@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import projectRoutes from "./routes/projectRoutes";
+import projectRoutes from "./routes/projectRoutes.js";
 
 const app = express();
 
@@ -19,13 +19,19 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/api/v1/projects", projectRoutes);
 
 // health check
-app.get("/", (req, res) => {
-  res.send("Server is up and running!");
+app.get("/", (_req, res) => {
+  res.json({ message: "Portfolio API is running" });
+});
+
+// 404 handler
+app.use((_req, _res, next) => {
+  const error = new Error("Route not found");
+  next(error);
 });
 
 // Request logging middleware (development only)
 if (process.env.NODE_ENV === "development") {
-  app.use((req, res, next) => {
+  app.use((req, _res, next) => {
     console.log(`${req.method} ${req.path}`);
     next();
   });

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "start": "node --enable-source-maps dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon --exec tsx src/server.ts",
     "watch": "tsc --watch",
     "clean": "rimraf dist"
