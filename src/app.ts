@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import cors from "cors";
 import projectRoutes from "./routes/projectRoutes.js";
 
@@ -29,11 +29,13 @@ app.use((_req: Request, _res: Response, next: NextFunction) => {
   next(error);
 });
 
-// Error handler
-app.use((err: Error, _req: Request, _res: Response, next: NextFunction) => {
+// Error handler - must have 4 parameters for Express to recognize it as error handler
+const errorHandler: ErrorRequestHandler = (err, req: Request, _res: Response, next: NextFunction) => {
   console.error(err.stack);
   next(err);
-});
+};
+
+app.use(errorHandler);
 
 // Request logging middleware (development only)
 if (process.env.NODE_ENV === "development") {
