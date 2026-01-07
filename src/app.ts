@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import cors from "cors";
-import projectRoutes from "./routes/projectRoutes.js";
+import projectRoutes from "./routes/project-routes.js";
+import contactRoutes from "./routes/contact-routes.js";
 
 const app = express();
 
@@ -16,7 +17,10 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Routes
+// app.use("/api/v1/services", projectRoutes);
+// app.use("/api/v1/resume", projectRoutes);
 app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/contact", contactRoutes);
 
 // health check
 app.get("/", (_req: Request, res: Response) => {
