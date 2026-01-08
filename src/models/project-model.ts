@@ -1,16 +1,5 @@
-import mongoose, { Schema, Model } from "mongoose";
-
-export interface IProject {
-  title: string;
-  shortDescription: string;
-  longDescription?: string;
-  techStack: string[];
-  images: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  isFeatured: boolean;
-  order: number;
-}
+import mongoose, { Schema } from "mongoose";
+import { IProject } from "../types";
 
 const urlRegex =
   /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
@@ -19,24 +8,21 @@ const projectSchema = new Schema<IProject>(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Project title is required"],
       trim: true,
-      maxlength: 100,
     },
     shortDescription: {
       type: String,
-      required: true,
+      required: [true, "Short description is required"],
       trim: true,
-      maxlength: 200,
     },
     longDescription: {
       type: String,
       trim: true,
-      maxlength: 5000,
     },
     techStack: {
       type: [String],
-      required: true,
+      required: [true, "Tech stack is required"],
       validate: {
         validator: (v: string[]) => v.length > 0,
         message: "Tech stack must contain at least one technology",
@@ -44,13 +30,22 @@ const projectSchema = new Schema<IProject>(
     },
     images: {
       type: [String],
+      required: [true, "At least one image is required"],
       validate: {
         validator: (v: string[]) => Array.isArray(v) && v.length > 0,
         message: "At least one image is required",
       },
     },
-    liveUrl: { type: String, match: urlRegex },
-    githubUrl: { type: String, match: urlRegex },
+    liveUrl: {
+      type: String,
+      trim: true,
+      match: [urlRegex, "Please provide a valid live URL"],
+    },
+    githubUrl: {
+      type: String,
+      trim: true,
+      match: [urlRegex, "Please provide a valid GitHub URL"],
+    },
     isFeatured: {
       type: Boolean,
       default: false,
@@ -59,11 +54,11 @@ const projectSchema = new Schema<IProject>(
     order: {
       type: Number,
       default: 0,
-      min: 0,
+      min: [0, "Order must be a positive number"],
     },
   },
   { timestamps: true }
 );
 
-const Project: Model<IProject> = mongoose.model("Project", projectSchema);
+const Project = mongoose.model<IProject>("Project", projectSchema);
 export default Project;

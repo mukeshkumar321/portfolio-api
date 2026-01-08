@@ -1,8 +1,11 @@
 import type { Request, Response } from "express";
-import Contact from "../models/Contact.js";
+import Contact from "../models/profile-model.js";
 
 // GET /api/v1/contact - Get the contact information
-export const getContact = async (_req: Request, res: Response): Promise<void> => {
+export const getContact = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
   try {
     // Find the first (and only) contact document
     const contact = await Contact.findOne().lean();
@@ -28,9 +31,26 @@ export const getContact = async (_req: Request, res: Response): Promise<void> =>
 };
 
 // POST /api/v1/contact - Create or update contact information (upsert)
-export const updateContact = async (req: Request, res: Response): Promise<void> => {
+export const updateContact = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const updateData: any = {};
+    const updateData: Partial<{
+      name: string;
+      email: string;
+      phone: string;
+      address: unknown;
+      bio: string;
+      resume: string;
+      social: {
+        linkedin?: string;
+        github?: string;
+        twitter?: string;
+        instagram?: string;
+        portfolio?: string;
+      };
+    }> = {};
 
     if (req.body.name !== undefined) updateData.name = req.body.name;
     if (req.body.email !== undefined) updateData.email = req.body.email;
@@ -38,7 +58,7 @@ export const updateContact = async (req: Request, res: Response): Promise<void> 
     if (req.body.address !== undefined) updateData.address = req.body.address;
     if (req.body.bio !== undefined) updateData.bio = req.body.bio;
     if (req.body.resume !== undefined) updateData.resume = req.body.resume;
-    
+
     // Handle nested social object
     if (req.body.social !== undefined) {
       updateData.social = {
@@ -54,10 +74,10 @@ export const updateContact = async (req: Request, res: Response): Promise<void> 
     const contact = await Contact.findOneAndUpdate(
       {}, // Empty filter matches the first document
       updateData,
-      { 
-        new: true, 
+      {
+        new: true,
         runValidators: true,
-        upsert: true // Create if doesn't exist
+        upsert: true, // Create if doesn't exist
       }
     );
 
@@ -69,6 +89,25 @@ export const updateContact = async (req: Request, res: Response): Promise<void> 
     res.status(400).json({
       success: false,
       error: (error as Error).message,
+    });
+  }
+};
+
+// GET /api/v1/contacts - Get all contacts
+export const getAllContacts = async (_req: Request, res: Response) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "Contacts fetched successfully",
+      data: contacts,
+    });
+  } catch (error: unknown) {
+    console.error("Error fetching contacts:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch contacts",
     });
   }
 };

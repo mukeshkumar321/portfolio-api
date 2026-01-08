@@ -8,7 +8,11 @@
     "start": "node --enable-source-maps dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon --exec tsx src/server.ts",
     "watch": "tsc --watch",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
   "keywords": [
     "portfolio",
@@ -31,8 +35,15 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^8.52.0",
+    "@typescript-eslint/parser": "^8.52.0",
     "cross-env": "^7.0.3",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "nodemon": "^3.0.2",
+    "prettier": "^3.7.4",
     "rimraf": "^5.0.5",
     "tsx": "^4.7.0"
   }

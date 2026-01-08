@@ -1,20 +1,18 @@
-import express from 'express';
-const router = express.Router();
+import express from "express";
 import {
   getProjects,
-  getProject,
+  getProjectById,
   createProject,
   updateProject,
-  deleteProject
-} from '../controllers/projectController.js';
+  deleteProject,
+} from "../controllers/project-controller.js";
 
-router.route('/')
-  .get(getProjects)
-  .post(createProject);
+const router = express.Router();
 
-router.route('/:id')
-  .get(getProject)
-  .put(updateProject)
-  .delete(deleteProject);
+router.get("/", getProjects);
+router.get("/:id", getProjectById);
+router.post("/", createProject);
+router.put("/:id", updateProject);
+router.delete("/:id", deleteProject);
 
 export default router;
